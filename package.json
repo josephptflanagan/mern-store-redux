@@ -1,5 +1,5 @@
 {
-  "name": "mern-shopping-redux",
+  "name": "mern-store-redux",
   "version": "1.0.0",
   "description": "",
   "main": "server/server.js",

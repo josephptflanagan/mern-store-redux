@@ -1,7 +1,7 @@
-# Redux Store
+# MERN Store Redux
 
 ## GitHub Repository URL
-[GitHub]()
+[GitHub](https://github.com/josephptflanagan/mern-store-redux)
 
 ## Deployed Site URL
 [Heroku]()
