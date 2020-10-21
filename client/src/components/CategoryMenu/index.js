@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
-import { UPDATE_CATEGORIES, UPDATE_CURRENT_CATEGORY } from '../../utils/actions';
+//Removed: import { useStoreContext } from '../../utils/GlobalState.js';
+//Added: 
+import {useSelector, useDispatch} from 'react-redux';
+//updated: import { UPDATE_CATEGORIES, UPDATE_CURRENT_CATEGORY } from '../../utils/actions'; to:
+import {updateCategories, updateCurrentCategory} from '../../utils/actions.js'
 import { useQuery } from '@apollo/react-hooks';
 import { QUERY_CATEGORIES } from "../../utils/queries";
-import { useStoreContext } from "../../utils/GlobalState";
+
 import { idbPromise } from '../../utils/helpers';
 
 function CategoryMenu() {
 
-  const [state, dispatch] = useStoreContext();
+  //Updated const [state, dispatch] = useStoreContext(); to the following 2 lines:
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   const { categories } = state;
 
@@ -16,27 +22,22 @@ function CategoryMenu() {
   useEffect(() => {
     // if categoryData exists or has changed from the response of useQuery, then run dispatch()
     if (categoryData) {
-      dispatch({
-        type: UPDATE_CATEGORIES,
-        categories: categoryData.categories
-      });
+
+      // Replaced: dispatch({type: UPDATE_CATEGORIES,categories: categoryData.categories}); with:
+      dispatch(updateCategories(categoryData.categories));
       categoryData.categories.forEach(category => {
         idbPromise('categories', 'put', category);
       });
     } else if (!loading) {
       idbPromise('categories', 'get').then(categories => {
-        dispatch({
-          type: UPDATE_CATEGORIES,
-          categories: categories
-        });
+        //Replaced: dispatch({type: UPDATE_CATEGORIES,categories: categories}); with:
+        dispatch(updateCategories(categories));
       });
     }
   }, [categoryData, loading, dispatch]);
   const handleClick = id => {
-    dispatch({
-      type: UPDATE_CURRENT_CATEGORY,
-      currentCategory: id
-    });
+    //Replaced: dispatch({type: UPDATE_CURRENT_CATEGORY, currentCategory: id}); with:
+    dispatch(updateCurrentCategory(id));
   };
 
   return (

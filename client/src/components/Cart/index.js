@@ -3,8 +3,12 @@ import CartItem from '../CartItem';
 import Auth from '../../utils/auth';
 import './style.css';
 
-import { useStoreContext } from '../../utils/GlobalState';
-import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from "../../utils/actions";
+//Added:
+import {useSelector, useDispatch} from 'react-redux';
+//Removed: import { useStoreContext } from '../../utils/GlobalState.js';
+//Updated: import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from "../../utils/actions"; to:
+import { toggleCart, addMultipleToCart } from "../../utils/actions";
+
 import { idbPromise } from "../../utils/helpers";
 
 import { loadStripe } from "@stripe/stripe-js";
@@ -15,7 +19,10 @@ const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
 const Cart = () => {
 
-  const [state, dispatch] = useStoreContext();
+  //Updated const [state, dispatch] = useStoreContext(); to the following 2 lines:
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
+
   const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
   useEffect(() => {
@@ -29,7 +36,7 @@ const Cart = () => {
   useEffect(() => {
     async function getCart() {
       const cart = await idbPromise('cart', 'get');
-      dispatch({ type: ADD_MULTIPLE_TO_CART, products: [...cart] });
+      dispatch(addMultipleToCart([...cart]));
     };
 
     if (!state.cart.length) {
@@ -37,8 +44,9 @@ const Cart = () => {
     }
   }, [state.cart.length, dispatch]);
 
-  function toggleCart() {
-    dispatch({ type: TOGGLE_CART });
+  function toggleTheCart() {
+    //Updated: dispatch({ type: TOGGLE_CART }); to:
+    dispatch(toggleCart());
   }
 
   function calculateTotal() {
@@ -65,7 +73,7 @@ const Cart = () => {
 
   if (!state.cartOpen) {
     return (
-      <div className="cart-closed" onClick={toggleCart}>
+      <div className="cart-closed" onClick={toggleTheCart}>
         <span
           role="img"
           aria-label="trash">🛒</span>
@@ -75,7 +83,7 @@ const Cart = () => {
 
   return (
     <div className="cart">
-      <div className="close" onClick={toggleCart}>[close]</div>
+      <div className="close" onClick={toggleTheCart}>[close]</div>
       <h2>Shopping Cart</h2>
       {state.cart.length ? (
         <div>
