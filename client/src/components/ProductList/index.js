@@ -7,15 +7,12 @@ import {useSelector, useDispatch} from 'react-redux';
 //Removed: import { useStoreContext } from '../../utils/GlobalState.js';
 //Updated: import { UPDATE_PRODUCTS } from '../../utils/actions'; to: 
 import { updateProducts } from '../../utils/actions';
-
 import { idbPromise } from "../../utils/helpers";
-
-import ProductItem from "../ProductItem";
 import { QUERY_PRODUCTS } from "../../utils/queries";
+import ProductItem from "../ProductItem";
 import spinner from "../../assets/spinner.gif"
 
 function ProductList() {
-
 
   //Updated const [state, dispatch] = useStoreContext(); to the following 2 lines:
   const state = useSelector((state) => state);
@@ -39,7 +36,7 @@ function ProductList() {
       idbPromise('products', 'get').then((products) => {
 
         //Updated:  dispatch({ type: UPDATE_PRODUCTS, products: products }); to:
-        dispatch(updateProducts(data.products));
+        dispatch(updateProducts(products));
       });
     }
   }, [data, loading, dispatch]);

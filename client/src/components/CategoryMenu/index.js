@@ -25,7 +25,7 @@ function CategoryMenu() {
 
       // Replaced: dispatch({type: UPDATE_CATEGORIES,categories: categoryData.categories}); with:
       dispatch(updateCategories(categoryData.categories));
-      categoryData.categories.forEach(category => {
+      categoryData.categories.forEach((category) => {
         idbPromise('categories', 'put', category);
       });
     } else if (!loading) {

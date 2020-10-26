@@ -11,8 +11,16 @@ import { idbPromise } from "../../utils/helpers";
 const CartItem = ({ item }) => {
 
   //Updated const [state, dispatch] = useStoreContext(); to the following 2 lines:
-  const cart = useSelector((state) => state);
+  const { cart } = useSelector((state) => state);
   const dispatch = useDispatch();
+
+  const removeItemFromCart = item => {
+
+    //Updated: dispatch({ type: REMOVE_FROM_CART, _id: item._id }); to: 
+    dispatch(removeFromCart(item._id, cart));
+    idbPromise('cart', 'delete', { ...item });
+
+  };
 
   const onChange = (e) => {
     const value = e.target.value;
@@ -31,13 +39,7 @@ const CartItem = ({ item }) => {
     }
   };
 
-  const removeItemFromCart = item => {
 
-    //Updated: dispatch({ type: REMOVE_FROM_CART, _id: item._id }); to: 
-    dispatch(removeFromCart(item._id, cart));
-    idbPromise('cart', 'delete', { ...item });
-
-  };
 
   return (
     <div className="flex-row">
